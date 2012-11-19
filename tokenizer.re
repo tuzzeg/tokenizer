@@ -2,17 +2,19 @@
 #include <stdio.h>
 #include <string.h>
 
-typedef struct {
-  char* s;
-  char* pos;
-  size_t len;
-} Scaner;
+#include "tokenizer.h"
 
-typedef struct {
-  char* start;
-  char* end;
-  unsigned int type;
-} Token;
+void Scaner_init(Scaner* scaner, char* s) {
+  scaner->s = s;
+  scaner->pos = s;
+  scaner->len = strlen(s);
+}
+
+void Token_set(Token* token, char* start, char* end, unsigned int type) {
+  token->start = start;
+  token->len = end - start;
+  token->type = type;
+}
 
 int next(
   /* IN, OUT */ Scaner* scaner,
@@ -34,10 +36,10 @@ int next(
 
 /*!re2c
   re2c:indent:top = 2;
-  [a-zA-Z]+    { token->start = start; token->end = scaner->pos; token->type = 1; return 1; }
-  [0-9]+       { token->start = start; token->end = scaner->pos; token->type = 2; return 1; }
-  [.,;:]+      { token->start = start; token->end = scaner->pos; token->type = 3; return 1; }
-  [^]          { token->start = start; token->end = scaner->pos; token->type = 5; return 1; }
+  [a-zA-Z]+    { Token_set(token, start, scaner->pos, 1); return 1; }
+  [0-9]+       { Token_set(token, start, scaner->pos, 2); return 1; }
+  [.,;:]+      { Token_set(token, start, scaner->pos, 3); return 1; }
+  [^]          { Token_set(token, start, scaner->pos, 4); return 1; }
 */
 }
 
@@ -46,13 +48,11 @@ int main(int argc, char **argv)
   if (argc > 1)
   {
     Scaner scaner;
-    scaner.s = argv[1];
-    scaner.pos = scaner.s;
-    scaner.len = strlen(scaner.s);
+    Scaner_init(&scaner, argv[1]);
     Token token;
     while (0 < next(&scaner, &token))
     {
-      printf("Tok (%lu, %lu) %d\n", token.start-scaner.s, token.end - scaner.s, token.type);
+      printf("Tok [%lu, %lu) %d\n", token.start-scaner.s, token.start-scaner.s+token.len, token.type);
     }
   }
   else
