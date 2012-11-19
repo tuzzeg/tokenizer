@@ -5,7 +5,7 @@ typedef struct {
   char* s;
   char* pos;
   size_t len;
-} Scaner;
+} Scanner;
 
 typedef struct {
   unsigned int type;
@@ -15,11 +15,11 @@ typedef struct {
 
 // Read input string, set found token in token struc and return count of consumed tokens (0 if end of string reached).
 int next(
-  /* IN, OUT */ Scaner* scaner,
+  /* IN, OUT */ Scanner* scaner,
   /*     OUT */ Token* token);
 
-void Scaner_init(
-  /* IN, OUT */ Scaner* scaner,
+void Scanner_init(
+  /* IN, OUT */ Scanner* scaner,
   /* IN      */ char* _s);
 
 

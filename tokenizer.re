@@ -1,10 +1,8 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 
 #include "tokenizer.h"
 
-void Scaner_init(Scaner* scaner, char* s) {
+void Scanner_init(Scanner* scaner, char* s) {
   scaner->s = s;
   scaner->pos = s;
   scaner->len = strlen(s);
@@ -17,14 +15,14 @@ void Token_set(Token* token, char* start, char* end, unsigned int type) {
 }
 
 int next(
-  /* IN, OUT */ Scaner* scaner,
+  /* IN, OUT */ Scanner* scaner,
   /*     OUT */ Token* token)
 {
   if (scaner-> len <= scaner->pos - scaner->s)
     return 0;
 
   char *end = scaner->s + scaner->len;
-  char *q = 0;
+  // char *q = 0;
 
 #define YYCTYPE         char
 #define YYCURSOR        (scaner->pos)
@@ -41,23 +39,4 @@ int next(
   [.,;:]+      { Token_set(token, start, scaner->pos, 3); return 1; }
   [^]          { Token_set(token, start, scaner->pos, 4); return 1; }
 */
-}
-
-int main(int argc, char **argv)
-{
-  if (argc > 1)
-  {
-    Scaner scaner;
-    Scaner_init(&scaner, argv[1]);
-    Token token;
-    while (0 < next(&scaner, &token))
-    {
-      printf("Tok [%lu, %lu) %d\n", token.start-scaner.s, token.start-scaner.s+token.len, token.type);
-    }
-  }
-  else
-  {
-    fprintf(stderr, "%s <expr>\n", argv[0]);
-    return 1;
-  }
 }
