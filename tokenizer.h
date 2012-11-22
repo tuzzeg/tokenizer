@@ -7,7 +7,9 @@ typedef enum {
 
   NUM    = 0x0002,
 
-  SPEC   = 0x0003,
+  SPEC       = 0x0003,
+  SPEC_SP    = 0x0103,
+  SPEC_PUNCT = 0x0203,
 
   URL    = 0x0004,
 

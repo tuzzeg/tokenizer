@@ -22,7 +22,7 @@ int next(
     return 0;
 
   // char *end = scaner->s + scaner->len;
-  // char *q = 0;
+  char *q = 0;
 
 #define YYCTYPE         char
 #define YYCURSOR        (scaner->pos)
@@ -43,11 +43,14 @@ int next(
   ALNUM = [a-zA-Z0-9];
   PRINT = [\040-\176];
   GRAPH = PRINT\BLANK;
+  PUNCT = [!?.,;"'(){}<>\[\]`];
 
   /* basic tokens */
   WORD = ALPHA+;
   NUM  = DIGIT+;
-  SPEC = GRAPH+;
+  SPEC = (GRAPH\ALNUM)+;
+  SPEC_SP = BLANK+;
+  SPEC_PUNCT = PUNCT+;
 
   /* URLs */
   URL_NON_PAREN = GRAPH\[()<>];
@@ -56,7 +59,7 @@ int next(
   URL_DOMAIN_WWW = "www"DIGIT{0,3}'.';
   URL_DOMAIN_OTHER = (ALNUM|'.'|'-')+'.'ALPHA{2,4}'/';
   URL_DOMAIN = (URL_PROTO ('/'{1,3}|(ALNUM|'%'))) | URL_DOMAIN_WWW | URL_DOMAIN_OTHER;
-  URL_END_CHAR = GRAPH\[`!()\[\]{};:'".,<>?];
+  URL_END_CHAR = GRAPH\PUNCT;
   URL_AFTER_DOMAIN = (URL_NON_PAREN+|URL_BALANCED_PAREN)+(URL_BALANCED_PAREN|URL_END_CHAR);
   URL = URL_DOMAIN URL_AFTER_DOMAIN;
 
@@ -69,7 +72,9 @@ int next(
   FWORD { Token_set(token, start, scaner->pos, WORD_F); return 1; }
   NUM   { Token_set(token, start, scaner->pos, NUM); return 1; }
   URL   { Token_set(token, start, scaner->pos, URL); return 1; }
-  SPEC  { Token_set(token, start, scaner->pos, SPEC); return 1; }
+  SPEC_SP    { Token_set(token, start, scaner->pos, SPEC_SP); return 1; }
+  SPEC_PUNCT { Token_set(token, start, scaner->pos, SPEC_PUNCT); return 1; }
+  SPEC       { Token_set(token, start, scaner->pos, SPEC); return 1; }
 
   /* all other */
   [^]   { Token_set(token, start, scaner->pos, OTHER); return 1; }
