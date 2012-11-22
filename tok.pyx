@@ -1,4 +1,12 @@
 from tok cimport Scanner, Token, Scanner_init, next
+cimport tok
+
+WORD = tok.WORD
+WORD_F = tok.WORD_F
+NUM = tok.NUM
+SPEC = tok.SPEC
+URL = tok.URL
+OTHER = tok.OTHER
 
 def tokenize(_s):
   cdef char* s = _s

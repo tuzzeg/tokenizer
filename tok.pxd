@@ -1,9 +1,21 @@
 cdef extern from "tokenizer.h":
+  ctypedef enum TokenType:
+    WORD   = 0x0001
+    WORD_F = 0x0101
+
+    NUM    = 0x0002
+
+    SPEC   = 0x0003
+
+    URL    = 0x0004
+
+    OTHER  = 0x0005
+
   ctypedef struct Scanner:
     pass
 
   ctypedef struct Token:
-    unsigned int type
+    TokenType type
     char* start
     Py_ssize_t len
 

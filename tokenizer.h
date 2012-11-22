@@ -1,6 +1,21 @@
 #ifndef _TOKENIZER_H_
 #define _TOKENIZER_H_
 
+typedef enum {
+  WORD   = 0x0001,
+  WORD_F = 0x0101,
+
+  NUM    = 0x0002,
+
+  SPEC   = 0x0003,
+
+  URL    = 0x0004,
+
+  OTHER  = 0x0005
+
+} TokenType;
+
+
 typedef struct {
   char* s;
   char* pos;
@@ -8,7 +23,7 @@ typedef struct {
 } Scanner;
 
 typedef struct {
-  unsigned int type;
+  TokenType type;
   char* start;
   size_t len;
 } Token;
