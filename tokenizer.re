@@ -65,7 +65,7 @@ int next(
 
   /* words like f#@k */
   FSPEC = [!@#$%^&*?~];
-  FWORD = ALPHA FSPEC (FSPEC|ALPHA)*;
+  FWORD = ALPHA (FSPEC|ALPHA)* FSPEC (FSPEC|ALPHA)* ALPHA;
 
   /* final rules */
   WORD  { Token_set(token, start, scaner->pos, WORD); return 1; }
